@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crop Recommendation System by Anant Sharma</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+
+  <style>
+    body {
+      background: linear-gradient(145deg, #0f172a, #1e293b);
+      font-family: 'Segoe UI', sans-serif;
+      color: #f1f5f9;
+    }
+
+    .card {
+  background-color: rgba(30, 41, 59, 0.85); /* translucent dark card */
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.15);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px); /* optional: frosted glass effect */
+}
+
+
+    .card:hover {
+      box-shadow: 0 0 35px rgba(34, 197, 94, 0.3);
+      transform: scale(1.0);
+    }
+
+    h2.title {
+      color: #22c55e;
+      font-weight: 700;
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #a3e635;
+    }
+
+    .form-control {
+      background-color: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 0.25rem rgba(34, 197, 94, 0.25);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      border: none;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #15803d, #1f9f50);
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .alert-success {
+      background-color: #166534;
+      border: none;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      color: #d1fae5;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #64748b;
+    }
+
+    footer span {
+      font-weight: 600;
+      color: #22c55e;
+    }
+
+    /* Disable number arrows */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    .animate-fade {
+      animation: fadeIn 0.9s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .social-icon i {
+  color: #94a3b8 !important;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon i:hover {
+  color: #22c55e !important;
+  transform: scale(1.15);
+}
+
+
+    /* ✅ Extra Responsive Tweaks */
+    @media (max-width: 768px) {
+      h2.title {
+        font-size: 1.5rem;
+      }
+      .form-label {
+        font-size: 0.9rem;
+      }
+      .form-control {
+        font-size: 0.9rem;
+      }
+      .btn-success {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-control {
+        padding: 10px;
+      }
+      .btn-success {
+        width: 100%;
+        padding: 12px;
+      }
+  
+
+    }
+  </style>
+</head>
+
+<body>
+    <div id="vanta-bg">
+  <div class="container py-5 animate-fade">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-11 col-md-10 col-lg-9">
+        <div class="card p-4">
+          <h2 class="title">
+            🌿 Crop Recommendation System By Anant<br />
+            <small class="text-muted" style="font-size: 1rem; color: #94a3b8">by Anant Sharma</small>
+          </h2>
+
+          <form method="POST" action="/predict">
+            <div class="row g-3">
+              <!-- Each field occupies full width on mobile, half width on larger screens -->
+              {% for name, label in {
+                "N": "Nitrogen (N) [mg/kg]",
+                "Fe": "Iron (Fe) [mg/kg]",
+                "Mn": "Manganese (Mn) [mg/kg]",
+                "S": "Sulfur (S) [mg/kg]",
+                "Mg": "Magnesium (Mg) [mg/kg]",
+                "C": "Carbon (C) [%]",
+                "P": "Phosphorus (P) [mg/kg]",
+                "K": "Potassium (K) [mg/kg]",
+                "temperature": "Temperature [°C]",
+                "humidity": "Humidity [%]",
+                "ph": "Soil pH",
+                "rainfall": "Rainfall [mm]"
+              }.items() %}
+              <div class="col-md-6">
+                <label for="{{ name }}" class="form-label">{{ label }}</label>
+                <input type="number" step="any" name="{{ name }}" id="{{ name }}" class="form-control" required />
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success px-5 py-2 shadow">
+                    <i class="fas fa-seedling me-2"></i>Predict Crop
+                  </button>                  
+            </div>
+          </form>
+
+          {% if prediction %}
+          <div class="alert alert-success text-center mt-4">
+            ✅ <strong>Recommended Crop:</strong> {{ prediction }}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center mt-5">
+    <p style="color: #94a3b8;">
+      Made by <strong style="color: #22c55e;">Anant Sharma</strong>
+    </p>
+    <div class="mt-2">
+      <a href="https://www.instagram.com/therealanantsharma" target="_blank" class="text-decoration-none me-3 social-icon">
+        <i class="fab fa-instagram fa-lg"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/anant13sharma/" target="_blank" class="text-decoration-none me-3 social-icon">
+        <i class="fab fa-linkedin fa-lg"></i>
+      </a>
+      <a href="https://github.com/anant13sharma" target="_blank" class="text-decoration-none social-icon">
+        <i class="fab fa-github fa-lg"></i>
+      </a>
+    </div>
+  </footer>
+  </div>
+</body>
+<script>
+  VANTA.NET({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    scale: 1.00,
+    scaleMobile: 1.00,
+    color: 0x22c55e,
+    backgroundColor: 0x0f172a,
+
+    // 🧘‍♂️ Smooth visual effects
+    points: 8.0,            // Fewer dots (calmer)
+    maxDistance: 50.0,      // Looser net lines
+    spacing: 20.0,          // More spacing between points
+    mouseSensitivity: 0.2   // 👈 This slows down mouse response
+  });
+</script>
+
+  
+</html>
