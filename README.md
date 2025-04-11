@@ -1,6 +1,11 @@
+> ⚠️ **Note:** Before exploring this repository, I highly recommend checking out the project [**A Machine Learning Based Crop Recommendation System**](https://github.com/anant13sharma/A-Machine-Learning-Based-Crop-Recommendation-System), where I’ve thoroughly explained how I trained and evaluated various models including **Logistic Regression**, **Naive Bayes**, **Decision Tree**, **Random Forest**, and a **Neural Network (MLPClassifier)**. It will give you a much better understanding of the approach and methodology used here.
+
+
 # 🌾 Crop Recommendation System by Anant Sharma
 
 A machine learning-based web application that predicts the most suitable crop to cultivate based on soil nutrients and environmental conditions like temperature, pH, and rainfall.
+
+
 
 ---
 
