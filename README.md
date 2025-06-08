@@ -5,6 +5,7 @@
 
 A machine learning-based web application that predicts the most suitable crop to cultivate based on soil nutrients and environmental conditions like temperature, pH, and rainfall.
 
+![ezgif com-animated-gif-maker-3](https://github.com/user-attachments/assets/e99713f8-e277-47cb-8be4-c47af27a402c)
 
 
 ---
